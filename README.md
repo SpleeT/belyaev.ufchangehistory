@@ -84,9 +84,9 @@ function ufLeadValidator(\Bitrix\Main\Event $event) {
 },
 ```
 
-Работа валидации
+### Работа валидации
 ![Screenshot](http://i.piccy.info/i9/226c26053c10ef41ff79de54ec0c279e/1619822375/18914/1427303/Valydatsyia.jpg)
-Пример истории пользовательских полей
+### Пример истории пользовательских полей
 ![Screenshot](http://i.piccy.info/i9/99d94eaee2d542da3a1f7aece901b12c/1619822695/38638/1427303/43878Ystoryia.jpg)
 ## Контакты
 TG: @VladimirBelyaev73
