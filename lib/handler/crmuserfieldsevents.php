@@ -37,10 +37,11 @@ class CrmUserFieldsEvents
     if(!$ufData) return true;
 
     $ufDataValues = self::getUserFieldsValues($arFields, $ufData, $entityTypeName, $changedBy);
-    self::writeChanges($ufDataValues); // Отправляем изменения
 
     $event = new \Bitrix\Main\Event("belyaev.ufchangehistory", "On{$entityTypeName}entityUfUpdate", $ufDataValues);
     $event->send();
+
+    self::writeChanges($ufDataValues); // Отправляем изменения
 
     return true;
   }

@@ -38,6 +38,7 @@ class belyaev_ufchangehistory extends CModule
       ModuleManager::registerModule($this->MODULE_ID);
       Loader::includeModule($this->MODULE_ID);
       Option::set($this->MODULE_ID, 'VERSION_DB', $this->versionToInt());
+      $this->InstallFiles();
       $this->InstallHandlers();
     }
 
@@ -45,12 +46,35 @@ class belyaev_ufchangehistory extends CModule
     {
       Option::delete($this->MODULE_ID, ["name" => 'VERSION_DB']);
       ModuleManager::unRegisterModule($this->MODULE_ID);
+      $this->UnInstallFiles();
       $this->UnInstallHandlers();
+    }
+
+    function InstallFiles()
+    {
+      CopyDirFiles(
+          __DIR__ . '/files/js',
+          $_SERVER["DOCUMENT_ROOT"] . '/local/js/' .$this->MODULE_ID,
+          true,
+          true
+      );
+    }
+
+    function UnInstallFiles()
+    {
+        DeleteDirFilesEx('/local/js/' . $this->MODULE_ID);
     }
 
     function InstallHandlers()
     {
       $eventManager = EventManager::getInstance();
+      $eventManager->registerEventHandlerCompatible(
+          'main',
+          'OnBeforeEndBufferContent',
+          $this->MODULE_ID,
+          Handlers::class,
+          'addAssetOnPage'
+      );
       $eventManager->registerEventHandlerCompatible(
           'crm',
           'OnBeforeCrmCompanyUpdate',
@@ -84,6 +108,13 @@ class belyaev_ufchangehistory extends CModule
     function UnInstallHandlers()
     {
       $eventManager = EventManager::getInstance();
+      $eventManager->unRegisterEventHandler(
+          'main',
+          'OnBeforeEndBufferContent',
+          $this->MODULE_ID,
+          Handlers::class,
+          'addAssetOnPage'
+      );
       $eventManager->unRegisterEventHandler(
           'crm',
           'OnBeforeCrmCompanyUpdate',
